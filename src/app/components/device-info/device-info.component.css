@@ -1,0 +1,11 @@
+.text-success {
+    font-weight: bold;
+}
+
+.text-danger {
+    font-weight: bold;
+}
+
+.text-secondary {
+    font-style: italic;
+}
