@@ -1,0 +1,102 @@
+<div class="container mt-4 p-3 border rounded shadow-sm bg-light">
+    <div class="mb-3 row align-items-center">
+        <label for="uuidInput" class="col-form-label col-auto fw-bold">Enter UUID:</label>
+        <div class="col">
+            <input type="search" id="uuidInput" class="form-control form-control-sm w-50 text-danger" [(ngModel)]="id">
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button class="btn btn-primary me-2" (click)="connect(id)" [disabled]="loading">🔗 Connect</button>
+        <button class="btn btn-danger" (click)="disconnect()" [disabled]="!deviceDetails">🔌 Disconnect</button>
+    </div>
+
+    <button class="btn btn-primary mb-3" (click)="scanDevice()">🔍 Scan for Devices</button>
+    
+    <table class="table table-bordered table-sm mt-3" *ngIf="foundDevices.length">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Device Name</th>
+                <th>Device ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let d of foundDevices; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ d.name }}</td>
+                <td>{{ d.id }}</td>
+                <td>
+                    <button class="btn btn-sm btn-success" (click)="connect(id)" [disabled]="loading">
+                        🔗 Connect
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>      
+    
+    <div *ngIf="!foundDevices.length" class="text-muted">No devices added yet.</div>
+
+    <div *ngIf="loading" class="text-info mb-2">⏳ Connecting...</div>
+    <div *ngIf="error" class="text-danger mb-2 fw-bold">❌ Error: {{ error }}</div>
+
+    <div *ngIf="deviceDetails" class="mt-4">
+        <h4 class="text-success">🔍 Connected Device</h4>
+        <div class="mb-3 ps-3">
+            <p><strong>Name:</strong> {{ deviceDetails.name }}</p>
+            <p><strong>ID:</strong> {{ deviceDetails.id }}</p>
+        </div>
+
+        <!-- <div *ngFor="let service of deviceDetails.services" class="mb-4 p-3 border rounded bg-white shadow-sm">
+            <h5 class="text-primary">🔧 Service UUID: {{ service.uuid }}</h5>
+
+            <ul class="list-group mt-2">
+                <li *ngFor="let char of service.characteristics" class="list-group-item">
+                    <p class="mb-1"><strong>Characteristic UUID:</strong> {{ char.uuid }}</p>
+                    <div class="ms-3">
+                        <strong>Properties:</strong>
+                        <ul>
+                            <li>Read: {{ char.properties.read }}</li>
+                            <li>Write: {{ char.properties.write }}</li>
+                            <li>Notify: {{ char.properties.notify }}</li>
+                            <li>Indicate: {{ char.properties.indicate }}</li>
+                        </ul>
+                        <p><strong>Value:</strong> {{ char.value }}</p>
+                    </div>
+                </li>
+            </ul>
+        </div> -->
+
+        <div *ngFor="let service of deviceDetails.services" class="mb-4">
+            <h5 class="text-primary">🔧 Service UUID: {{ service.uuid }}</h5>
+        
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Characteristic UUID</th>
+                            <th>Read</th>
+                            <th>Write</th>
+                            <th>Notify</th>
+                            <th>Indicate</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let char of service.characteristics">
+                            <td>{{ char.uuid }}</td>
+                            <td>{{ char.properties.read }}</td>
+                            <td>{{ char.properties.write }}</td>
+                            <td>{{ char.properties.notify }}</td>
+                            <td>{{ char.properties.indicate }}</td>
+                            <td>{{ char.value }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</div>
+  
